@@ -6,30 +6,66 @@ using System.Threading.Tasks;
 
 namespace Lab_Refactoring
 {
-
-    public class Class1
+    public enum AccountStatus
     {
-        public decimal Calculate(decimal amount, int type, int years)
+        NotRegistered = 1,
+        SimpleCustomer = 2,
+        ValuableCustomer = 3,
+        MostValuableCustomer = 4
+    }
+
+    public static class Constants
+    {
+        public const int MAXIMUM_DISCOUNT_FOR_LOYALTY = 5;
+        public const decimal DISCOUNT_FOR_SIMPLE_CUSTOMERS = 0.1m;
+        public const decimal DISCOUNT_FOR_VALUABLE_CUSTOMERS = 0.3m;
+        public const decimal DISCOUNT_FOR_MOST_VALUABLE_CUSTOMERS = 0.5m;
+    }
+
+    public static class PriceExtensions
+    {
+        public static decimal ApplyDiscountForAccountStatus(this decimal price, decimal discountSize)
         {
-            decimal result = 0;
-            decimal disc = (years > 5) ? (decimal)5 / 100 : (decimal)years / 100;
-            if (type == 1)
+            return price - (discountSize * price);
+        }
+
+        public static decimal ApplyDiscountForTimeOfHavingAccount(this decimal price, int timeOfHavingAccountInYears)
+        {
+            decimal discountForLoyaltyInPercentage = (timeOfHavingAccountInYears > Constants.MAXIMUM_DISCOUNT_FOR_LOYALTY) ? (decimal)Constants.MAXIMUM_DISCOUNT_FOR_LOYALTY / 100 : (decimal)timeOfHavingAccountInYears / 100;
+            return price - (discountForLoyaltyInPercentage * price);
+        }
+    }
+
+    public class DiscountManager
+    {
+        public decimal ApplyDiscount(decimal price, int accountStatus, int timeOfHavingAccountInYears)
+        {
+            decimal priceAfterDiscount = 0;
+
+            switch (accountStatus)
             {
-                result = amount;
+                case (int)AccountStatus.NotRegistered:
+                    priceAfterDiscount = price;
+                    break;
+
+                case (int)AccountStatus.SimpleCustomer:
+                    priceAfterDiscount = price.ApplyDiscountForAccountStatus(Constants.DISCOUNT_FOR_SIMPLE_CUSTOMERS);
+                    break;
+
+                case (int)AccountStatus.ValuableCustomer:
+                    priceAfterDiscount = price.ApplyDiscountForAccountStatus(Constants.DISCOUNT_FOR_VALUABLE_CUSTOMERS);
+                    break;
+
+                case (int)AccountStatus.MostValuableCustomer:
+                    priceAfterDiscount = price.ApplyDiscountForAccountStatus(Constants.DISCOUNT_FOR_MOST_VALUABLE_CUSTOMERS);
+                    break;
+
+                default:
+                    throw new NotImplementedException();
             }
-            else if (type == 2)
-            {
-                result = (amount - (0.1m * amount)) - disc * (amount - (0.1m * amount));
-            }
-            else if (type == 3)
-            {
-                result = (0.7m * amount) - disc * (0.7m * amount);
-            }
-            else if (type == 4)
-            {
-                result = (amount - (0.5m * amount)) - disc * (amount - (0.5m * amount));
-            }
-            return result;
+            priceAfterDiscount = priceAfterDiscount.ApplyDiscountForTimeOfHavingAccount(timeOfHavingAccountInYears);
+
+            return priceAfterDiscount;
         }
     }
 
@@ -37,10 +73,20 @@ namespace Lab_Refactoring
     {
         static void Main(string[] args)
         {
-            decimal priceAfterDiscount = 0m;
-            //...
-            Console.WriteLine("Price after discout: " + priceAfterDiscount);
+            // Create an instance of the DiscountManager
+            DiscountManager manager = new DiscountManager();
+
+            // Set up some test variables
+            decimal originalPrice = 1000m;
+            int status = (int)AccountStatus.ValuableCustomer;
+            int years = 4;
+
+            // Call the method
+            decimal priceAfterDiscount = manager.ApplyDiscount(originalPrice, status, years);
+
+            // Print the results
+            Console.WriteLine("Original price: " + originalPrice);
+            Console.WriteLine("Price after discount: " + priceAfterDiscount);
         }
     }
-
 }
