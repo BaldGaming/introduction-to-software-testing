@@ -73,18 +73,18 @@ namespace Lab_Refactoring
     {
         static void Main(string[] args)
         {
-            // Create an instance of the DiscountManager
+            // Create an instance of DiscountManager
             DiscountManager manager = new DiscountManager();
 
-            // Set up some test variables
+            // Test variables
             decimal originalPrice = 1000m;
             int status = (int)AccountStatus.ValuableCustomer;
             int years = 4;
 
-            // Call the method
+            // We run the test using the refactored method
             decimal priceAfterDiscount = manager.ApplyDiscount(originalPrice, status, years);
 
-            // Print the results
+            // Results
             Console.WriteLine("Original price: " + originalPrice);
             Console.WriteLine("Price after discount: " + priceAfterDiscount);
         }
