@@ -65,7 +65,7 @@ public class MoneyBagTest {
 
     // adding a negative amount that cancels out an existing currency
     // input: MoneyBag(10 USD, 5 CHF), add Money(-5, "CHF")
-    // expected: Money(10, "USD") (The bag simplifies to a single Money object)
+    // expected: Money(10, "USD")
     @Test
     public void testAddMoney_addNegativeAmount() {
         IMoney result = baseBag.addMoney(mn5chf);
@@ -91,7 +91,7 @@ public class MoneyBagTest {
 
     // bag does not contain the requested currency at all
     // input: MoneyBag(10 USD, 5 CHF), check for Money(7, "NIS")
-    // expected: false (Expected to throw NullPointerException based on current lab implementation)
+    // expected: Expected to throw NullPointerException
     @Test
     public void testContains_missingCurrency() {
         try {
