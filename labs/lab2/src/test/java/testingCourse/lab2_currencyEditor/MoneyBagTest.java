@@ -1,5 +1,6 @@
 package testingCourse.lab2_currencyEditor;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -86,7 +87,7 @@ public class MoneyBagTest {
     // expected: false
     @Test
     public void testContains_wrongAmount() {
-        assertTrue(!baseBag.contains(m15usd));
+        assertFalse(baseBag.contains(m15usd));
     }
 
     // bag does not contain the requested currency at all
@@ -94,13 +95,14 @@ public class MoneyBagTest {
     // expected: Expected to throw NullPointerException
     @Test
     public void testContains_missingCurrency() {
+
         try {
             boolean result = baseBag.contains(m7nis);
 
-            assertTrue(!result);
+            assertFalse(result);
 
         } catch (NullPointerException e) { // Catches the error and returns true because the currency is missing
-            assertTrue(true);
+            assertTrue(false);
         }
     }
 
@@ -109,6 +111,6 @@ public class MoneyBagTest {
     // expected: false
     @Test
     public void testContains_zeroAmount() {
-        assertTrue(!baseBag.contains(m0usd));
+        assertFalse(baseBag.contains(m0usd));
     }
 }
