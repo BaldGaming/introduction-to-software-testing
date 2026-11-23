@@ -76,13 +76,15 @@ public class CoffeeMaker {
 	 */
     public boolean deleteRecipe(Recipe r) {
         boolean canDeleteRecipe = false;
-        if(r != null) {
-	        for(int i = 0; i < NUM_RECIPES; i++) {
-	        	if(r.equals(recipeArray[i])) {
-	                recipeArray[i] = recipeArray[i];  
-	                canDeleteRecipe = true;
-	            }
-	        }
+        for(int i = 0; i < NUM_RECIPES; i++) {
+            try {
+                if(r.equals(recipeArray[i])) {
+                    recipeArray[i] = recipeArray[i];  
+                    canDeleteRecipe = true;
+                }
+            } catch(NullPointerException e) {
+                return canDeleteRecipe;
+            }
         }
         return canDeleteRecipe;
     }

@@ -17,6 +17,7 @@ public class CoffeeMakerTest {
 	private Recipe r2;
 	private Recipe r3;
 	private Recipe r4;
+	private Recipe r5; // Used for custom testing
 
 	@BeforeEach
 	public void setUp() throws Exception {
@@ -58,6 +59,15 @@ public class CoffeeMakerTest {
 		r4.setAmtMilk(1);
 		r4.setAmtSugar(1);
 		r4.setPrice(65);
+
+		// Set up for r1
+		r5 = new Recipe();
+		r5.setName("Matcha");
+		r5.setAmtChocolate(0);
+		r5.setAmtCoffee(3); 
+		r5.setAmtMilk(9999999);// we set a high number to trigger a check
+		r5.setAmtSugar(1);
+		r5.setPrice(50);
 	}
 
 	@Test
@@ -177,6 +187,41 @@ public class CoffeeMakerTest {
 
 	@Test
 	public void deleteARecipe() {
-		// We want to delete a recipe and invoke line 81, 82, 83 in CoffeeMaker.java
+		assertTrue(cm.addRecipe(r1)); // add r1 and verify
+		assertTrue(cm.deleteRecipe(r1)); // delete it.
+
+		assertFalse(cm.deleteRecipe(null)); // delete null
+	}
+
+	@Test
+	public void failToEdit() {
+		cm.addRecipe(r1); // "Coffee" is in the machine
+		cm.addRecipe(r2); // "Mocha" is in the machine
+		assertFalse(cm.editRecipe(r1, r2)); // tries to turn "Coffee" into "Mocha"
+		assertEquals(r1, cm.getRecipeForName("Coffee")); // confirms r1 was restored
+	}
+
+	@Test
+	public void notEnoughIngredients() {
+		assertTrue(cm.addRecipe(r5)); // we add the recipe
+		cm.makeCoffee(r5, 100); // we make r5 but set setAmtCoffee way too high
+	}
+
+	@Test
+	public void setNegativeInventory() {
+		Inventory inventory = new Inventory();
+		inventory.setChocolate(-1); // we fail setChocolate if statement
+		inventory.setMilk(-1); // we fail setMilk if statement
+	}
+
+	@Test
+	public void setNegativeAmounts() {
+		// negative values are rejected
+		r5.setAmtCoffee(-1);
+		r5.setAmtSugar(-1);
+
+		// Check to see if it was unchanged
+		assertEquals(3, r5.getAmtCoffee());
+		assertEquals(1, r5.getAmtSugar());
 	}
 }

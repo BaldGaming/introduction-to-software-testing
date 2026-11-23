@@ -46,7 +46,7 @@ public class Recipe {
     public void setAmtCoffee(int amtCoffee) {
 		if (amtCoffee >= 0) {
 			this.amtCoffee = amtCoffee;
-		} 
+		}
 	}
     /**
 	 * @return   Returns the amtMilk.
