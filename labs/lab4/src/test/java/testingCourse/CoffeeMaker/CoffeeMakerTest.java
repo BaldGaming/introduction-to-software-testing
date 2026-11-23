@@ -20,10 +20,10 @@ public class CoffeeMakerTest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-	
+
 		cm = new CoffeeMaker();
-		
-		//Set up for r1
+
+		// Set up for r1
 		r1 = new Recipe();
 		r1.setName("Coffee");
 		r1.setAmtChocolate(0);
@@ -31,8 +31,8 @@ public class CoffeeMakerTest {
 		r1.setAmtMilk(1);
 		r1.setAmtSugar(1);
 		r1.setPrice(50);
-		
-		//Set up for r2
+
+		// Set up for r2
 		r2 = new Recipe();
 		r2.setName("Mocha");
 		r2.setAmtChocolate(2);
@@ -40,8 +40,8 @@ public class CoffeeMakerTest {
 		r2.setAmtMilk(1);
 		r2.setAmtSugar(1);
 		r2.setPrice(75);
-		
-		//Set up for r3
+
+		// Set up for r3
 		r3 = new Recipe();
 		r3.setName("Latte");
 		r3.setAmtChocolate(0);
@@ -49,21 +49,21 @@ public class CoffeeMakerTest {
 		r3.setAmtMilk(3);
 		r3.setAmtSugar(1);
 		r3.setPrice(100);
-		
-		//Set up for r4
+
+		// Set up for r4
 		r4 = new Recipe();
 		r4.setName("Hot Chocolate");
 		r4.setAmtChocolate(4);
 		r4.setAmtCoffee(0);
 		r4.setAmtMilk(1);
 		r4.setAmtSugar(1);
-		r4.setPrice(65);		
+		r4.setPrice(65);
 	}
-	
+
 	@Test
 	public void AddRecipe() {
 		assertTrue(cm.addRecipe(r1));
-		assertEquals(cm.getRecipeForName("Coffee"),r1);
+		assertEquals(cm.getRecipeForName("Coffee"), r1);
 		assertTrue(cm.addRecipe(r2));
 		assertEquals(cm.getRecipeForName("Mocha"), r2);
 		assertFalse(cm.addRecipe(r1));
@@ -80,40 +80,40 @@ public class CoffeeMakerTest {
 
 	@Test
 	public void EditRecipe() {
-		assertFalse(cm.editRecipe(r1,r2));
+		assertFalse(cm.editRecipe(r1, r2));
 		cm.addRecipe(r1);
-		assertTrue(cm.editRecipe(r1,r2));
-		assertEquals(cm.getRecipeForName("Mocha"),r2);
+		assertTrue(cm.editRecipe(r1, r2));
+		assertEquals(cm.getRecipeForName("Mocha"), r2);
 	}
 
 	@Test
 	public void AddInventory() {
-		//An inventory is initialized with 15 units of each ingredient
-		assertTrue(cm.addInventory(0,0,0,0));
+		// An inventory is initialized with 15 units of each ingredient
+		assertTrue(cm.addInventory(0, 0, 0, 0));
 		assertEquals(cm.checkInventory().getChocolate(), 15);
 		assertEquals(cm.checkInventory().getCoffee(), 15);
 		assertEquals(cm.checkInventory().getMilk(), 15);
 		assertEquals(cm.checkInventory().getSugar(), 15);
-		
-		assertFalse(cm.addInventory(-1,0,0,0));
+
+		assertFalse(cm.addInventory(-1, 0, 0, 0));
 		assertEquals(cm.checkInventory().getChocolate(), 15);
 		assertEquals(cm.checkInventory().getCoffee(), 15);
 		assertEquals(cm.checkInventory().getMilk(), 15);
 		assertEquals(cm.checkInventory().getSugar(), 15);
-		
-		assertFalse(cm.addInventory(0,-1,0,0));
+
+		assertFalse(cm.addInventory(0, -1, 0, 0));
 		assertEquals(cm.checkInventory().getChocolate(), 15);
 		assertEquals(cm.checkInventory().getCoffee(), 15);
 		assertEquals(cm.checkInventory().getMilk(), 15);
 		assertEquals(cm.checkInventory().getSugar(), 15);
-		
-		assertFalse(cm.addInventory(0,0,-1,0));
+
+		assertFalse(cm.addInventory(0, 0, -1, 0));
 		assertEquals(cm.checkInventory().getChocolate(), 15);
 		assertEquals(cm.checkInventory().getCoffee(), 15);
 		assertEquals(cm.checkInventory().getMilk(), 15);
 		assertEquals(cm.checkInventory().getSugar(), 15);
-		
-		assertFalse(cm.addInventory(0,0,0,-1));
+
+		assertFalse(cm.addInventory(0, 0, 0, -1));
 		assertEquals(cm.checkInventory().getChocolate(), 15);
 		assertEquals(cm.checkInventory().getCoffee(), 15);
 		assertEquals(cm.checkInventory().getMilk(), 15);
@@ -148,9 +148,35 @@ public class CoffeeMakerTest {
 
 	@Test
 	public void GetRecipeFull() {
-		boolean [] recipeFull = cm.getRecipeFull();
-		for(int i = 0; i < recipeFull.length; i++) {
+		boolean[] recipeFull = cm.getRecipeFull();
+		for (int i = 0; i < recipeFull.length; i++) {
 			assertFalse(recipeFull[i]);
 		}
+	}
+
+	@Test
+	public void checkIfRecipeExistsInArray() {
+		assertTrue(cm.addRecipe(r1)); // add r1 and verify it succeeded
+		Recipe[] recipeArray = cm.getRecipes(); // fetch all recipe slots
+		boolean[] fullList = cm.getRecipeFull(); // fetch the flags tracking which slots are occupied
+
+		assertEquals(3, recipeArray.length); // check if the array is length 3
+		// check if r1 exists while r2 doesn't
+		assertTrue(java.util.Arrays.asList(recipeArray).contains(r1));
+		assertFalse(java.util.Arrays.asList(recipeArray).contains(r2));
+
+		// make sure fullList stays in sync with recipeArray
+		for (int i = 0; i < recipeArray.length; i++) {
+			if (r1.equals(recipeArray[i])) {
+				assertTrue(fullList[i]); // slot holding r1 should be marked full
+			} else {
+				assertFalse(fullList[i]); // all other slots should remain empty
+			}
+		}
+	}
+
+	@Test
+	public void deleteARecipe() {
+		// We want to delete a recipe and invoke line 81, 82, 83 in CoffeeMaker.java
 	}
 }
