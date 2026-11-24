@@ -100,5 +100,44 @@ namespace BankAccountNS.Tests
 
             Assert.Fail("No exception was thrown.");
         }
+
+        [TestMethod()]
+        public void subtractingWhenMBalanceIsNegative()
+        {
+            double beginningBalance = -10.00;
+            double debitAmount = 1.00;
+            BankAccount account = new BankAccount("    @!#%%9073ליגדכbanana", beginningBalance);
+
+            try
+            {
+                account.Debit(debitAmount);
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                StringAssert.Contains(e.Message, "amount");
+                return;
+            }
+
+            Assert.Fail("No exception was thrown.");
+        }
+
+        [TestMethod()]
+        public void subtractingWhenBuilderIsEmpty()
+        {
+            double debitAmount = 10.00;
+            BankAccount account = new BankAccount();
+
+            try
+            {
+                account.Debit(debitAmount);
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                StringAssert.Contains(e.Message, "amount");
+                return;
+            }
+
+            Assert.Fail("No exception was thrown.");
+        }
     }
 }

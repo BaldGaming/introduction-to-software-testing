@@ -23,3 +23,13 @@ EXPECTED OUTPUT - 1.28
 EXISTS - 10.50 (Frozen = True)
 INPUT - 5.10
 EXPECTED OUTPUT - ERROR (Exception: "Account frozen")
+
+--- Scenario 6 --- (attempting to subtract from an account with negative balance)
+EXISTS - -10.00
+INPUT - 1.00
+EXPECTED OUTPUT - ERROR (ArgumentOutOfRangeException)
+
+--- Scenario 7 --- (attempting to use an empty builder)
+EXISTS - N/A
+INPUT - 10.00
+EXPECTED OUTPUT - ERROR (ArgumentOutOfRangeException)
