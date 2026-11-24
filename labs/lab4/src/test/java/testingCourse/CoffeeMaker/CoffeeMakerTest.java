@@ -189,6 +189,7 @@ public class CoffeeMakerTest {
 	public void deleteARecipe() {
 		assertTrue(cm.addRecipe(r1)); // add r1 and verify
 		assertTrue(cm.deleteRecipe(r1)); // delete it.
+		assertNull(cm.getRecipeForName("Coffee")); // verify that it was really deleted
 
 		assertFalse(cm.deleteRecipe(null)); // delete null
 	}
