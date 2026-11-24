@@ -64,7 +64,7 @@ public class CoffeeMakerTest {
 		r5 = new Recipe();
 		r5.setName("Matcha");
 		r5.setAmtChocolate(0);
-		r5.setAmtCoffee(3); 
+		r5.setAmtCoffee(3);
 		r5.setAmtMilk(9999999);// we set a high number to trigger a check
 		r5.setAmtSugar(1);
 		r5.setPrice(50);
